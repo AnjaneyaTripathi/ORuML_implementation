@@ -8,7 +8,7 @@ This is a temporary script file.
 # load dataset
 import pandas as pd
 import io
-df = pd.read_csv('oruml_dataset.csv')
+df = pd.read_csv('dataset.csv')
 print(df.shape)
 # record columns to delete
 to_del = ['Node', 'MAC', 'IP', 'network_id']

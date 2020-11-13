@@ -34,7 +34,7 @@ dataset["class"] = lb_make.fit_transform(dataset["class"])
 X = dataset.iloc[:, :-2].values
 y = dataset.iloc[:, [6]].values
 
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3)
 
 #Feature Scaling
 scaler = StandardScaler()
