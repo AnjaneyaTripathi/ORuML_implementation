@@ -15,6 +15,7 @@ from keras.layers import Dense, Activation, Dropout
 from keras.optimizers import SGD
 from sklearn import preprocessing
 from keras.models import model_from_json
+from sklearn.metrics import accuracy_score
 
 warnings.filterwarnings('ignore')
 
@@ -78,16 +79,17 @@ x = pd.DataFrame(x_scaled)
 y = pd.DataFrame(result)
 
 x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.33, random_state=4)
-
+'''
 model = Sequential()
 model.add(Dense(24, activation='relu', input_dim=22, kernel_initializer='uniform'))
 model.add(Dense(36, activation='relu'))
 model.add(Dense(36, activation='relu'))
 model.add(Dense(3, kernel_initializer='uniform', activation='sigmoid'))
 model.summary()
+'''
 
 sgd = SGD(lr = 0.007, momentum = 0.5)
-
+'''
 model.compile(optimizer = sgd, loss = 'sparse_categorical_crossentropy', metrics = ['accuracy'])
 history = model.fit(x_train, y_train, batch_size = 1, epochs = 40, verbose=2)
 
@@ -107,7 +109,7 @@ plt.ylabel('Accuracy')
 plt.xlabel('Epoch')
 plt.legend(['train', 'loss'], loc='upper left')
 plt.show()
-
+'''
 
 '''
 model_json = model.to_json()
@@ -116,6 +118,8 @@ with open("model.json", "w") as json_file:
     json_file.write(model_json)
 
 model.save_weights("model.h5")
+
+'''
  
 json_file = open('model.json', 'r')
 loaded_model_json = json_file.read()
@@ -128,7 +132,23 @@ print("Loaded model from disk")
 loaded_model.compile(optimizer = sgd, loss = 'sparse_categorical_crossentropy', metrics = ['accuracy'])
 score = loaded_model.evaluate(x_test, y_test, batch_size=1)
 print("%s: %.2f%%" % (loaded_model.metrics_names[1], score[1]*100))
-'''
+
+res = loaded_model.predict(x_test)
+y_pred = []
+
+for i in res:
+    m = max(i)
+    if(m == i[0]):
+        y_pred.append(0)
+    elif(m == i[1]):
+        y_pred.append(1)
+    else:
+        y_pred.append(2)
+
+print(accuracy_score(y_test, y_pred))
+fpr, tpr, thresholds = metrics.roc_curve(y_pred, y_test, pos_label=2)
+print(metrics.auc(fpr, tpr))
+
 
 
 
