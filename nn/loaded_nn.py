@@ -1,16 +1,9 @@
-import keras
 import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt 
 from sklearn.preprocessing import OneHotEncoder, LabelEncoder
 from sklearn.compose import ColumnTransformer
-from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
 from sklearn import metrics
-from sklearn.metrics import roc_auc_score
 import warnings
-from keras.models import Sequential
-from keras.layers import Dense, Activation, Dropout
 from keras.optimizers import SGD
 from sklearn import preprocessing
 from keras.models import model_from_json
@@ -79,42 +72,7 @@ y = pd.DataFrame(result)
 
 x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.33, random_state=4)
 
-model = Sequential()
-model.add(Dense(24, activation='relu', input_dim=22, kernel_initializer='uniform'))
-model.add(Dense(36, activation='relu'))
-model.add(Dense(36, activation='relu'))
-model.add(Dense(3, kernel_initializer='uniform', activation='sigmoid'))
-model.summary()
-
 sgd = SGD(lr = 0.007, momentum = 0.5)
-
-model.compile(optimizer = sgd, loss = 'sparse_categorical_crossentropy', metrics = ['accuracy'])
-history = model.fit(x_train, y_train, batch_size = 1, epochs = 40, verbose=2)
-
-scores = model.evaluate(x_train, y_train, batch_size=1)
-print("%s: %.2f%%" % (model.metrics_names[1], scores[1]*100))
-
-scores = model.evaluate(x_test, y_test, batch_size=1)
-print("%s: %.2f%%" % (model.metrics_names[1], scores[1]*100))
-
-# list all data in history
-#print(history.history.keys())
-
-plt.plot(history.history['accuracy'])
-plt.plot(history.history['loss'])
-plt.title('Model Accuracy')
-plt.ylabel('Accuracy')
-plt.xlabel('Epoch')
-plt.legend(['train', 'loss'], loc='upper left')
-plt.show()
-
-'''
-model_json = model.to_json()
-
-with open("model.json", "w") as json_file:
-    json_file.write(model_json)
-
-model.save_weights("model.h5")
  
 json_file = open('model.json', 'r')
 loaded_model_json = json_file.read()
@@ -125,6 +83,7 @@ loaded_model.load_weights("model.h5")
 print("Loaded model from disk")
  
 loaded_model.compile(optimizer = sgd, loss = 'sparse_categorical_crossentropy', metrics = ['accuracy'])
+
 score = loaded_model.evaluate(x_test, y_test, batch_size=1)
 print("%s: %.2f%%" % (loaded_model.metrics_names[1], score[1]*100))
 
@@ -143,6 +102,20 @@ for i in res:
 print(accuracy_score(y_test, y_pred))
 fpr, tpr, thresholds = metrics.roc_curve(y_pred, y_test, pos_label=2)
 print(metrics.auc(fpr, tpr))
-'''
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
